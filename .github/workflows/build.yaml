@@ -79,6 +79,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: digests
+          pattern: digest-*
+          merge-multiple: true
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -102,8 +104,8 @@ jobs:
 
       - name: Create and push multi-arch manifest
         run: |
-          A=$(cat digests/digest-amd64/digest-amd64.txt)
-          B=$(cat digests/digest-arm64/digest-arm64.txt)
+          A="${{ env.IMAGE_NAME }}@$(cat digests/digest-amd64.txt)"
+          B="${{ env.IMAGE_NAME }}@$(cat digests/digest-arm64.txt)"
           docker buildx imagetools create \
             -t $(echo "${{ steps.tags.outputs.tags }}" | tr ',' ' -t ') \
             "$A" "$B"
