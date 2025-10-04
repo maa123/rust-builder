@@ -104,8 +104,8 @@ jobs:
 
       - name: Create and push multi-arch manifest
         run: |
-          A="${{ env.IMAGE_NAME }}@$(cat digests/digest-amd64.txt)"
-          B="${{ env.IMAGE_NAME }}@$(cat digests/digest-arm64.txt)"
+          A="$(cat digests/digest-amd64.txt)"
+          B="$(cat digests/digest-arm64.txt)"
           docker buildx imagetools create \
             -t $(echo "${{ steps.tags.outputs.tags }}" | tr ',' ' -t ') \
             "$A" "$B"
